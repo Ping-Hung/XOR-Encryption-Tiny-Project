@@ -13,9 +13,9 @@ XORing $E$ (again) with *key* is thus
 ```math
     \begin{align*}
         E \oplus \text{key} &= (\text{raw} \oplus \text{key}) \oplus \text{key} \\
-                               &= \text{raw} \oplus (\text{key} \oplus \text{key}) \\
-                               &= \text{raw} \oplus 0   \\
-                               &= \text{raw},
+                            &= \text{raw} \oplus (\text{key} \oplus \text{key}) \\
+                            &= \text{raw} \oplus 0   \\
+                            &= \text{raw},
     \end{align*}
 ```
 
