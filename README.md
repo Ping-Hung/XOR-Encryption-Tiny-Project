@@ -5,16 +5,16 @@ text *E* can be decrypted by XORing again with *key*
 ## Short Proof (Just to Show Off)
 From definition,
 ```math
-    E \overset{\text{def}}{=} \text{raw} \bigoplus \text{key},
+    E \overset{\text{def}}{=} \text{raw} \oplus \text{key},
 ```
 
 XORing $E$ (again) with *key* is thus
 
 ```math
     \begin{align*}
-        E \bigoplus \text{key} &= (\text{raw} \bigoplus \text{key}) \bigoplus \text{key} \\
-                               &= \text{raw} \bigoplus (\text{key} \bigoplus \text{key}) \\
-                               &= \text{raw} \bigoplus 0   \\
+        E \oplus \text{key} &= (\text{raw} \oplus \text{key}) \oplus \text{key} \\
+                               &= \text{raw} \oplus (\text{key} \oplus \text{key}) \\
+                               &= \text{raw} \oplus 0   \\
                                &= \text{raw},
     \end{align*}
 ```
