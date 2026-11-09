@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 enum status {
     NO_ERR,
@@ -8,8 +9,71 @@ enum status {
     OPERATION_ERR
 };
 
-enum status encrypt(char *original, char *secret);
-enum status decrypt(char *encoded, char *secret);
+enum status encrypt(char *original, char *secret)
+{
+    enum status res = NO_ERR;
+    FILE *fin = fopen(original, "r"); 
+    FILE *fsec = fopen(secret, "r");
+    FILE *fout = fopen("outfile", "w");
+    if (!fin || !fsec) {
+        res = FILE_OPEN_ERR;
+        goto f_open_err;
+    }
+
+    /* byte by byte XOR encryption */
+    while (!feof(fin)) {
+        for (int s = fgetc(fsec); s != EOF; s = fgetc(fsec)) {
+            int ch = fgetc(fin);
+            if (ch == EOF) {
+                break;
+            }
+            fputc(ch ^ s, fout);
+        }
+        rewind(fsec);
+    }
+
+    fclose(fout);
+f_open_err:
+    if (fin) {
+        fclose(fin);
+    }
+    if (fsec) {
+        fclose(fsec);
+    }
+    return res;
+}
+
+enum status decrypt(char *encoded, char *secret)
+{
+    enum status res = NO_ERR;
+    FILE *fen = fopen(encoded, "r+");
+    FILE *fs = fopen(secret, "r");
+    if (!fen || !fs) {
+        res = FILE_OPEN_ERR;
+        goto f_open_err;
+    }
+    /* byte by byte decryption */
+    while (!feof(fen)) {
+        for (int s = fgetc(fs); s != EOF; s = fgetc(fs)) {
+            int en = fgetc(fen);
+            if (en == EOF) {
+                break;
+            }
+            fseek(fen, -1L, SEEK_CUR);
+            fputc(en ^ s, fen);
+        }
+        rewind(fs);
+    }
+
+f_open_err:
+    if (fen) {
+        fclose(fen);
+    }
+    if (fs) {
+        fclose(fs);
+    }
+    return res;
+}
 
 int main(int argc, char *argv[])
 {
