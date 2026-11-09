@@ -14,13 +14,13 @@ enum status encrypt(char *original, char *secret)
     enum status res = NO_ERR;
     FILE *fin = fopen(original, "r"); 
     FILE *fsec = fopen(secret, "r");
-    FILE *fout = fopen("outfile", "w");
     if (!fin || !fsec) {
         res = FILE_OPEN_ERR;
         goto f_open_err;
     }
 
     /* byte by byte XOR encryption */
+    FILE *fout = fopen("outfile", "w");
     while (!feof(fin)) {
         for (int s = fgetc(fsec); s != EOF; s = fgetc(fsec)) {
             int ch = fgetc(fin);
@@ -31,7 +31,6 @@ enum status encrypt(char *original, char *secret)
         }
         rewind(fsec);
     }
-
     fclose(fout);
 f_open_err:
     if (fin) {
